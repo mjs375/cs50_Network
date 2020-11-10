@@ -4,5 +4,5 @@
 
 
 
-# Ignore develop.md, which contains private information:
-.develop
+develop
+.develop1
