@@ -1,0 +1,8 @@
+# .gitignore
+# # #
+# All files in this file will be ignored when pushing to Github
+
+
+
+# Ignore develop.md, which contains private information:
+.develop
