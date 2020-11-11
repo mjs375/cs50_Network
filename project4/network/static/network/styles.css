@@ -4,6 +4,7 @@
 body {
   background-color: #FBEEC1;
 }
+
 .navbar-custom {
   background-color: #BC986A;
 }
@@ -11,8 +12,6 @@ body {
 .content {
   padding: 10px;
 }
-
-
 
 #title { /*SQUEAK title-header*/
   font-family: 'Cute Font', cursive;

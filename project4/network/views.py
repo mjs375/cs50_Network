@@ -5,11 +5,16 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
-from .models import User#, Post
+from .models import User, Post
+from django import forms
+from .forms import NewPostForm
 
 
 def index(request):
-    return render(request, "network/index.html")
+    form = NewPostForm(initial={'user': request.user})
+    return render(request, "network/index.html", {
+        "form": form,
+    })
 
 
 def login_view(request):
@@ -68,13 +73,21 @@ def register(request):
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-@login_required # A User must be signed in to make a post
-def post(request):
-    #
-    if request.method != "POST":
-        # return erorr
-        pass
-    #
+
+# NewPostForm is defined in "network/forms.py"
+@login_required
+def squeak(request):
+    if request.method == "GET":
+        return render(request, "network/index.html", {
+            "form": NewPostForm(initial={'user': request.user}),
+        })
+    # Compose a new squeak, must be via POST:
+    else: # request.method == "POST" (form is submitted)
+        form = NewPostForm(request.POST) # create instance of form from POST data
+        if form.is_valid(): # validate form
+            form.save() # save the new Squeak object
+        return index(request)
+
 
 
 

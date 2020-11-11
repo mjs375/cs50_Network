@@ -15,9 +15,13 @@ class Post(models.Model):
     #--What user created the post (ForeignKey => class User)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_user")
     #--The content of the post:
-    msg = models.CharField(max_length=160)
+    message = models.CharField(max_length=160)
     #--Automatically add timestamp as of object creation
     timestamp = models.DateTimeField(auto_now_add=True)
     #--Who liked the post?
-    likers = models.ManyToManyField("User", related_name="post_likers")
-    #--EMOJI FIELD: every post gets x1 'headliner' emoji
+    likers = models.ManyToManyField("User", related_name="post_likers", blank=True)
+
+
+
+
+#

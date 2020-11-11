@@ -1,8 +1,20 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+
 <div class="content">
-  TODO
+
+
+  <div id="compose-view">
+    <form action="{% url 'squeak' %}" method="post">
+      {% csrf_token %} <!--Security token-->
+      {{ form }} <!--Django inserts form from views.py[squeak()]-->
+      <input type="submit" value="Squeak">
+    </form>
+  </div>
+
+
+
 
 
 </div>
