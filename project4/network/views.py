@@ -4,7 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from django.contrib.auth.decorators import login_required
+from .models import User#, Post
 
 
 def index(request):
@@ -61,3 +62,21 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # # # # # # # # # # # # # # F E A T U R E # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+@login_required # A User must be signed in to make a post
+def post(request):
+    #
+    if request.method != "POST":
+        # return erorr
+        pass
+    #
+
+
+
+
+#
