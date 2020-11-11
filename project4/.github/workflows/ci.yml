@@ -1,0 +1,18 @@
+name: Testing SQUEAK # workflow name
+on: # when the workflow should run
+  push: #whenever the following branches PUSH to repository
+    branches:
+      - [ main ]
+      - [ feature ]
+  pull:
+    branches: [ feature ]
+
+jobs:
+  test_project: # name of the 1 job
+    runs-on: ubuntu-latest # which Github VM to run code on
+    steps: # actions that should occur when job is run
+      - uses: actions/checkout@v2 #
+      - name: Run Django unit tests on Network/SQUEAK # description
+        run: |
+          pip3 install --user django
+          python3 manage.py test
