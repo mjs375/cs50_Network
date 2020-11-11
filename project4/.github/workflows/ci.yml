@@ -1,7 +1,7 @@
 name: Testing # workflow name
 on:
   push:
-    branches: [ main ] # when the workflow should run
+    branches: [ feature ] # when the workflow should run
 
 jobs:
   test_project: # name of the 1 job
