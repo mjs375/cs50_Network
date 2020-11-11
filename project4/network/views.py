@@ -4,11 +4,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from django.contrib.auth.decorators import login_required
+from .models import User, Post
+from django import forms
+from .forms import NewPostForm
 
 
 def index(request):
-    return render(request, "network/index.html")
+    form = NewPostForm(initial={'user': request.user})
+    return render(request, "network/index.html", {
+        "form": form,
+    })
 
 
 def login_view(request):
@@ -61,3 +67,29 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+ # # # # # # # # # # # # # # F E A T U R E # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+
+# NewPostForm is defined in "network/forms.py"
+@login_required
+def squeak(request):
+    if request.method == "GET":
+        return render(request, "network/index.html", {
+            "form": NewPostForm(initial={'user': request.user}),
+        })
+    # Compose a new squeak, must be via POST:
+    else: # request.method == "POST" (form is submitted)
+        form = NewPostForm(request.POST) # create instance of form from POST data
+        if form.is_valid(): # validate form
+            form.save() # save the new Squeak object
+        return index(request)
+
+
+
+
+
+#
