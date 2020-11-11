@@ -1,10 +1,9 @@
 # .GITIGNORE
-#   Specifies files, folders, and patterns of files/folders to ignore,
-#   aka entities to NOT track and push to Github remote repository.
+# # # Specifies files, folders, and patterns of files/folders to ignore, aka entities to NOT track and push to Github remote repository.
 
 
-# Personal project development details
+## Personal project development details
 develop.md
 
-# Virtual environment
+## Virtual environment folder & files
 env/
