@@ -1,11 +1,5 @@
 name: Testing SQUEAK # workflow name
-on: # when the workflow should run
-  push: #whenever the following branches PUSH to repository
-    branches:
-      - [ main ]
-      - [ feature ]
-  pull:
-    branches: [ feature ]
+on: push # when the workflow should run
 
 jobs:
   test_project: # name of the 1 job
