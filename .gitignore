@@ -1,14 +1,16 @@
-# .GITIGNORE
+# .GITIGNORE #
 # # # Specifies files, folders, and patterns of files/folders to ignore, aka entities to NOT track and push to Github remote repository.
 
 
-## Personal project development details
+## Personal project development details ##
 develop.md
 
-## Virtual environment folder & files
+## Virtual environment folder & files ##
 env/
 
-## DB for Network Project
+## DB for Network Project ##
 project4/db.sqlite3
 
-## Migrations files for Network
+## Django Files ##
+__pycache__
+*.pyc
