@@ -1,0 +1,27 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<div class="content">
+
+
+
+  <div id="allposts">
+    {% for post in user_posts %}
+      <div class="post">
+        <span>{{ post.user }}</span>
+        <span>{{ post.message }}</span>
+        <span>{{ post.timestamp }}</span>
+      </div>
+    {% endfor %}
+
+
+  </div>
+
+
+</div>
+
+
+
+
+{% endblock %}

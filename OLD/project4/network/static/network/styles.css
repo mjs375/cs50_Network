@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap'); /*Google font import:*/
+
+
+/* COLOR PALETTE:
+
+
+*/
+
+
+a {
+  text-decoration: none;
+}
+body {
+  background-color: #FBEEC1;
+}
+
+.messagebody {
+  padding-left: 15px;
+}
+
+
+
+.header {
+  display: inline;
+  color: black;
+  font-size: 10pt;
+}
+
+.timestamp {
+  font-style: italic;
+  color: #9b744a;
+}
+
+.user {
+  color: #482919;
+  font-weight: bold;
+}
+
+.navbar-custom {
+  background-color: #BC986A;
+}
+
+.content {
+  padding: 10px;
+}
+
+#title { /*SQUEAK title-header*/
+  font-family: 'Cute Font', cursive;
+  padding-left: 40px;
+  padding-right: 40px;
+  font-size: 45pt;
+  animation-name: squeak;
+  animation-duration: .5s;
+  animation-iteration-count: 1;
+}
+/**/
+@keyframes squeak {
+  0% {
+    font-size: 45pt;
+  }
+  50% {
+    font-size: 50pt;
+  }
+  100% {
+    font-size: 45pt;
+  }
+}
+
+#count {
+  color: grey;
+  font-style: italic;
+}
+#compose-view { /*Squeak form div*/
+  display: block;
+  text-align: center;
+}
+#squeak_form {
+  display: inline-block;
+  left-margin: auto;
+  right-margin: auto;
+  text-align: left;
+}
+textarea {
+  resize: none;
+  spellcheck: true;
+}
+
+div .post { /*Each individual post*/
+  border: 1px black solid;
+  margin: 2px;
+  padding: 5px;
+}
+
+
+#submit-btn {
+  vertical-align: middle;
+  display: inline-block;
+  font-size: 20px;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🐿️</text></svg>") 16 0,auto; /*!emojicursor.app*/;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #e5d4c3;
+  background-color: #482919;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #9b744a;
+}
+#submit-btn:hover {
+  background-color: #a56336;
+}
+#submit-btn:active {
+  background-color: #b76935;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.vertical-align {
+  float: right;
+  align: right;
+}
+
+
+/**/
