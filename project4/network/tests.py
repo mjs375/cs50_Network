@@ -30,7 +30,7 @@ class LogInTest(TestCase): # TEST LOGIN PROCESS
 
 """
 class NetworkTestCase(TestCase):
-    # 
+    #
     def setUp(self): # create dummy data for tests
         # Create users
         chip = User.objects.create(username="Chip", email="chip@munk.com", password="chipper")
