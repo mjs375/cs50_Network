@@ -116,7 +116,7 @@ def edit(request, post_id):
 
 
 
-# Load the user's profile page:
+#--Load the user's profile page:
 # @login_required
 def profile(request, user):
     if request.method == "GET":
