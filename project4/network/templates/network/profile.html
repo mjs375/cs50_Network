@@ -5,6 +5,12 @@
 <div class="content">
   <h2 style="text-align: center">{{ username }}</h2>
 
+
+<div class="counts">
+  <p>Followed by: {{ followed }}</p>
+  <p>Following: {{ follower }}</p>
+</div>
+
 {% include "network/posts.html" %}
 
 

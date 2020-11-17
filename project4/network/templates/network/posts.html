@@ -14,8 +14,34 @@
       <div>
         <div class="messagebody" id="body-{{post.id}}">{{ post.message }}</div>
         <div style="display: inline;" class="edit">
-
         </div>
+
+
+
+        <!-- LIKES * * * * * * * * * * * * * * * * * -->
+        {% if user.is_authenticated %}<!-- Must be signed in to -->
+          {% if post.user == request.user %}<!-- Let all but post-user Like/Unlike:-->
+          <div style="display: inline" class="likes">Likes: {{post.count_likes }}</div>
+          {% else %}<!-- Other signed-in users can Like/Unlike-->
+            <div style="display: inline" class="likes">Likes: {{post.count_likes }}</div>
+            {% if request.user in post.likedby.all %} <!-- YOU already liked this post; you can UNlike it -->
+            <div style="display: inline">
+              <a onclick="likeToggle(this)" href="#">Unlike</a>
+            </div>
+            {% else %} <!-- YOU haven't yet liked this post-->
+            <div style="display: inline">
+              <a onclick="likeToggle(this)" href="#">Like</a>
+            </div>
+            {% endif %}
+          {% endif %}
+        {% else %} <!-- Not a signed-in user, just show likes_count -->
+        <div style="display: inline" class="likes">Likes: {{ post.count_likes }}</div>
+        {% endif %}<!-- ENDIF of user.is_authenticated -->
+
+        <!-- * * * * * * * * * * * * * * * * * * * * -->
+
+
+
       </div>
     </div>
   {% endfor %}

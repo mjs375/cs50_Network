@@ -13,6 +13,7 @@ class NewPostForm(forms.ModelForm):
         }
         #
         widgets = {
+            'likedby': forms.HiddenInput(),
             'user': forms.HiddenInput(), # auto-done
             'timestamp': forms.HiddenInput(),
             'message': forms.Textarea(attrs={'rows':'3','cols': '55', 'class':'squeak_entry', 'id':'counter', 'onkeyup':'myCounter(this);'}),

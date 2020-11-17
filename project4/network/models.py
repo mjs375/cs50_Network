@@ -21,6 +21,11 @@ class User(AbstractUser):
     pass
 
 
+
+
+
+
+
 class Post(models.Model):
     #--What user created the post (ForeignKey => class User)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="post_user")
@@ -28,8 +33,17 @@ class Post(models.Model):
     message = models.CharField(max_length=160)
     #--Automatically add timestamp as of object creation
     timestamp = models.DateTimeField(auto_now_add=True)
-    #--Who liked the post?
-    # likers = models.ManyToManyField("User", related_name="post_likers", blank=True)
+    #--Who liked the post? (ForeignKey is a ManyToManyField)
+    likedby = models.ManyToManyField(get_user_model(), default=None, related_name="liking_user", blank=True, null=True)
+
+    def count_likes(self):
+        """Counts the total likes that a given post has."""
+        if self.likedby.count() > 0:
+            return self.likedby.count()
+        else:
+            return "∅"
+
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

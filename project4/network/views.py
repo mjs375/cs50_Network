@@ -123,10 +123,17 @@ def profile(request, user):
         print("User:",user)
         username = User.objects.get(username=user) # get User object
         user_posts = Post.objects.filter(user=username.id).order_by('-timestamp') # access posts by Post's
+        #--How many people follow user:
+        userfollowers = Follow.objects.filter(follower=request.user).count()
+        #--How many people the user follows:
+        userfollowed = Follow.objects.filter(followed=request.user).count()
+        # # #
         return render(request, "network/profile.html", {
             # User's own posts:
             "posts": user_posts,
             "username": username,
+            "follower": userfollowers,
+            "followed": userfollowed,
         })
     else: #
         pass
@@ -135,14 +142,16 @@ def profile(request, user):
 @login_required
 def follow(request, user):
     if request.method == "GET":
-        #--Get Username
-        username = User.objects.get(username=user) # get User object
-        #--Get ALL followed users of User
-        followfolks = Follow.objects.filter(follower=user)
-        #--Get ALL followed users' posts of User
-        followposts = Post.objects.filter(user=followfolks.id)
+        #--Get ALL followed users of User(name) [query_set]
+        follow_queryset = Follow.objects.filter(follower=request.user)
+        #--Turn into a list of user.ids
+        flist = [f.id for f in follow_queryset]
+        print("Followed ids:",flist)
+        #--Get ALL posts of ALL followed users, of User
+        posts = Post.objects.filter(user__in=flist).order_by("timestamp").reverse()
+        print("POSTS:",posts)
         return render(request, "network/follow.html", {
-
+            "posts": posts,
         })
 
 

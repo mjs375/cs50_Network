@@ -15,7 +15,9 @@ $ python3 manage.py runserver
 # Register your models here.
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("user", "message", "timestamp")
+    list_display = ("user", "message", "timestamp",)
+    #--Manually add/del post likers in Admin:
+    filter_horizontal = ("likedby",)
 
 class FollowAdmin(admin.ModelAdmin):
     list_display = ("follower", "followed")

@@ -1,5 +1,38 @@
 // J A V A S C R I P T
 
+
+
+
+
+function likeToggle(likebutton) {
+  var button = event.srcElement.innerHTML;
+  console.log(button)
+  if (button == "Like") { //--Unlike Path
+    //--Change button
+    button.innerHTML = "Unlike"
+  } else { //--Like Path "Like"
+    //--Change button
+    button.innerHTML = "Unlike"
+  }
+
+
+
+
+} // * * * * * * * * * * * * * * * * * * * * * * *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function editPost(obj) {
   //--Create a textarea element, add attributes:
   const edit_box = document.createElement('TEXTAREA');
@@ -64,25 +97,6 @@ function submitEdit(id) {
   document.getElementById(id).setAttribute('onclick', 'editPost(this)');
 
 } // * * * * * * * * * * * * * * * * *
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
