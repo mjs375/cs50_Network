@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Post #class, class
+from .models import User, Post, Follow
 
 """
 $ python3 manage.py createsuperuser
@@ -17,8 +17,11 @@ $ python3 manage.py runserver
 class PostAdmin(admin.ModelAdmin):
     list_display = ("user", "message", "timestamp")
 
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ("follower", "followed")
 
 
 # register your models here to manipulate in the Admin interface:
 admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(Follow, FollowAdmin)

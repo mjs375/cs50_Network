@@ -15,9 +15,9 @@ class NewPostForm(forms.ModelForm):
         widgets = {
             'user': forms.HiddenInput(), # auto-done
             'timestamp': forms.HiddenInput(),
-            'message': forms.Textarea(attrs={'cols':80, 'rows':2, 'class':'squeak_entry', 'id':'counter', 'onkeyup':'myCounter(this);'}),
+            'message': forms.Textarea(attrs={'rows':'3','cols': '55', 'class':'squeak_entry', 'id':'counter', 'onkeyup':'myCounter(this);'}),
             'likers': forms.HiddenInput(),
         }
-
+# 'cols':80, 'rows':2
 
 # https://www.codexworld.com/live-character-counter-javascript/

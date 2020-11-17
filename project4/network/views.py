@@ -3,14 +3,20 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
 from django.contrib.auth.decorators import login_required
-from .models import User, Post
 from django import forms
-from .forms import NewPostForm
 from django.views.decorators.csrf import csrf_exempt # # #
 import json
 from django.http import JsonResponse
+
+from .models import User, Post, Follow
+from .forms import NewPostForm
+
+
+
+
+
+
 
 def index(request):
     form = NewPostForm(initial={'user': request.user}) # create new squeak form instance
@@ -117,13 +123,27 @@ def profile(request, user):
         print("User:",user)
         username = User.objects.get(username=user) # get User object
         user_posts = Post.objects.filter(user=username.id).order_by('-timestamp') # access posts by Post's
-
         return render(request, "network/profile.html", {
             # User's own posts:
-            "user_posts": user_posts,
+            "posts": user_posts,
+            "username": username,
         })
     else: #
         pass
+
+
+@login_required
+def follow(request, user):
+    if request.method == "GET":
+        #--Get Username
+        username = User.objects.get(username=user) # get User object
+        #--Get ALL followed users of User
+        followfolks = Follow.objects.filter(follower=user)
+        #--Get ALL followed users' posts of User
+        followposts = Post.objects.filter(user=followfolks.id)
+        return render(request, "network/follow.html", {
+
+        })
 
 
 

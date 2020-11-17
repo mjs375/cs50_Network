@@ -15,7 +15,8 @@ urlpatterns = [
     path("profile/<str:user>", views.profile, name="profile"),
     # Edit a SQUEAK
     path("edit/<int:post_id>", views.edit, name="edit"),
-
+    # See your followed users' posts:
+    path("follow/<str:user>", views.follow, name="follow"),
 ]
 
 

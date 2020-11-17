@@ -17,29 +17,7 @@
   </div>
 
 
-
-  <div id="allposts">
-    {% for post in posts %}
-
-      <div class="post" id="post-{{post.id}}">
-        <a href="/profile/{{post.user}}"><div class="header user" style="display: inline;">{{ post.user }}</div></a>
-        <div class="header timestamp" style="display: inline;">{{ post.timestamp }}</div>
-      {% if post.user == request.user %} <!-- -->
-        <div class="header">
-          <button style="float:right;" onclick="editPost(this)" id="{{post.id}}" class="edit-btn">Edit</button>
-        </div>
-        <div class="test" id="edit-{{post.id}}"></div><!--EDIT BOX appears here id="edit-{{post.id}}"-->
-      {% endif %}
-        <div>
-          <div class="messagebody" id="body-{{post.id}}">{{ post.message }}</div>
-          <div style="display: inline;" class="edit">
-
-          </div>
-        </div>
-      </div>
-
-    {% endfor %}
-  </div>
+  {% include "network/posts.html" %}
 
 
 

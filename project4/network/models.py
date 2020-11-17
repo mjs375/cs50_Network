@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth import get_user_model
+
 
 """
 $ python3 manage.py makemigrations
@@ -10,18 +12,18 @@ $ python3 manage.py runserver
     -Run the app
 """
 
+# (inherits username, email, password from AbstractUser)
 class User(AbstractUser):
-        # (inherits username, email, password from AbstractUser)
-    #--Who is the User following?
-    following = models.ManyToManyField("self", symmetrical=False, related_name="user_follower")
+    #--Who is the User following? ITS OWN MODEL NOW
+    # followed = models.ManyToManyField("self", symmetrical=False, related_name="user_follower")
         # self-referencing Foreign-key: "self"
         # symmetrical: i.e. user1 follows user2, user2 doesn't follow user1 (default is true)
-
+    pass
 
 
 class Post(models.Model):
     #--What user created the post (ForeignKey => class User)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_user")
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="post_user")
     #--The content of the post:
     message = models.CharField(max_length=160)
     #--Automatically add timestamp as of object creation
@@ -30,6 +32,15 @@ class Post(models.Model):
     # likers = models.ManyToManyField("User", related_name="post_likers", blank=True)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+class Follow(models.Model):
+    #--Who is doing the following:
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_follower")
+    #--Whom is being followed:
+    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_followed")
+
+
+
 
 """
 class Hashtag(models.Model):
