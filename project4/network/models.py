@@ -28,20 +28,20 @@ class User(AbstractUser):
 
 class Post(models.Model):
     #--What user created the post (ForeignKey => class User)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="post_user")
+    postuser = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="post_user")
     #--The content of the post:
     message = models.CharField(max_length=160)
     #--Automatically add timestamp as of object creation
     timestamp = models.DateTimeField(auto_now_add=True)
     #--Who liked the post? (ForeignKey is a ManyToManyField)
-    likedby = models.ManyToManyField(get_user_model(), default=None, related_name="liking_user", blank=True, null=True)
+    likedby = models.ManyToManyField(get_user_model(), default=None, related_name="liking_user", blank=True)
 
     def count_likes(self):
         """Counts the total likes that a given post has."""
         if self.likedby.count() > 0:
             return self.likedby.count()
         else:
-            return "∅"
+            return "0"
 
 
 
@@ -52,7 +52,6 @@ class Follow(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_follower")
     #--Whom is being followed:
     followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post_followed")
-
 
 
 

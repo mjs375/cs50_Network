@@ -7,9 +7,24 @@
 
 
 <div class="counts">
-  <p>Followed by: {{ followed }}</p>
-  <p>Following: {{ follower }}</p>
+  <p>Followed by: <span id="followby">{{ followers.count }}</span></p>
+  <p>Following: <span>{{ following.count }}</span></p>
 </div>
+
+{% if user.is_authenticated and request.user != username %}
+        <!-- Follow buttons here -->
+  {% if request.user in checkfollow %}
+    <a href="" onclick="followToggle('{{ username }}')">Unfollow</a>
+  {% else %}
+    <a href="" onclick="followToggle('{{ username }}')">Follow</a>
+  {% endif %}
+
+{% endif %}
+
+
+
+
+
 
 {% include "network/posts.html" %}
 

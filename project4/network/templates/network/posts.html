@@ -1,13 +1,14 @@
 <!-- THIS PAGE IS A TEMPLATE ONLY, IT IS *ONLY* ADDED TO OTHER PAGES, IT NEVER STANDS ALONE.-->
-<div id="allposts">
-  {% for post in posts %}
 
-    <div class="post" id="post-{{post.id}}">
-      <a href="/profile/{{post.user}}"><div class="header user" style="display: inline;">{{ post.user }}</div></a>
+<div id="allposts">
+  {% for post in page_obj %}
+
+    <div class="post" id="{{post.id}}"> <!-- "post-id" -->
+      <a href="/profile/{{post.postuser}}"><div class="header user" style="display: inline;">{{ post.postuser }}</div></a>
       <div class="header timestamp" style="display: inline;">{{ post.timestamp }}</div>
-    {% if post.user == request.user %} <!-- -->
+    {% if post.postuser == request.user %} <!-- -->
       <div class="header">
-        <button style="float:right;" onclick="editPost(this)" id="{{post.id}}" class="edit-btn">Edit</button>
+        <button style="float:right;" onclick="editPost(this)" id="btn-{{post.id}}" class="edit-btn">Edit</button>
       </div>
       <div class="test" id="edit-{{post.id}}"></div><!--EDIT BOX appears here id="edit-{{post.id}}"-->
     {% endif %}
@@ -15,34 +16,57 @@
         <div class="messagebody" id="body-{{post.id}}">{{ post.message }}</div>
         <div style="display: inline;" class="edit">
         </div>
-
-
-
-        <!-- LIKES * * * * * * * * * * * * * * * * * -->
-        {% if user.is_authenticated %}<!-- Must be signed in to -->
-          {% if post.user == request.user %}<!-- Let all but post-user Like/Unlike:-->
-          <div style="display: inline" class="likes">Likes: {{post.count_likes }}</div>
-          {% else %}<!-- Other signed-in users can Like/Unlike-->
-            <div style="display: inline" class="likes">Likes: {{post.count_likes }}</div>
-            {% if request.user in post.likedby.all %} <!-- YOU already liked this post; you can UNlike it -->
-            <div style="display: inline">
-              <a onclick="likeToggle(this)" href="#">Unlike</a>
-            </div>
-            {% else %} <!-- YOU haven't yet liked this post-->
-            <div style="display: inline">
-              <a onclick="likeToggle(this)" href="#">Like</a>
-            </div>
-            {% endif %}
-          {% endif %}
-        {% else %} <!-- Not a signed-in user, just show likes_count -->
-        <div style="display: inline" class="likes">Likes: {{ post.count_likes }}</div>
-        {% endif %}<!-- ENDIF of user.is_authenticated -->
-
-        <!-- * * * * * * * * * * * * * * * * * * * * -->
-
-
-
       </div>
+
+      <!-- LIKES * * * * * * * * * * * * * * * * * -->
+      {% if user.is_authenticated %}<!-- Must be signed in to -->
+        {% if post.postuser == request.user %}<!-- Let all but post-user Like/Unlike:-->
+        <div style="display: inline" class="likes">Likes: <span id="likes-{{post.id}}">{{post.count_likes }}</span></div>
+        {% else %}<!-- Other signed-in users can Like/Unlike-->
+          <div style="display: inline" class="likes">Likes: <span id="likes-{{post.id}}">{{post.count_likes }}</span></div>
+          {% if request.user in post.likedby.all %} <!-- YOU already liked this post; you can UNlike it -->
+          <div style="display: inline">
+            <a id="u{{ post.id }}" onclick="likeToggle(this)" href="#">Unlike</a>
+          </div>
+          {% else %} <!-- YOU haven't yet liked this post-->
+          <div style="display: inline">
+            <a id="l{{ post.id }}" onclick="likeToggle(this)" href="#">Like</a>
+          </div>
+          {% endif %}
+        {% endif %}
+      {% else %} <!-- Not a signed-in user, just show likes_count -->
+      <div style="display: inline" class="likes">Likes: {{ post.count_likes }}</div>
+      {% endif %}<!-- ENDIF of user.is_authenticated -->
+      <!-- * * * * * * * * * * * * * * * * * * * * -->
+
     </div>
+  {% empty %}
+  
   {% endfor %}
 </div>
+
+
+
+
+
+{% if page_obj %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% else %}
+<p>There are no Squeaks! Get Squeakin'!</p>
+{% endif %}

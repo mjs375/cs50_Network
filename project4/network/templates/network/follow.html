@@ -3,9 +3,14 @@
 {% block body %}
 
 <div class="content">
-  <h2 style="text-align: center">Followed Users</h2>
-{% include "network/posts.html" %}
+  <h2 style="text-align: center">Followed Users:</h2>
+{% if user.is_authenticated %}
+  {% include "network/posts.html" %}
+{% endif %}
+
 </div>
+
+
 
 
 

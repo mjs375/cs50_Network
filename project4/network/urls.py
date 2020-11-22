@@ -1,5 +1,5 @@
 
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -12,11 +12,15 @@ urlpatterns = [
     # Post a new Squeak:
     path("squeak", views.squeak, name="squeak"),
     # Go to user's profile page:
-    path("profile/<str:user>", views.profile, name="profile"),
+    path("profile/<str:username>", views.profile, name="profile"),
     # Edit a SQUEAK
     path("edit/<int:post_id>", views.edit, name="edit"),
     # See your followed users' posts:
-    path("follow/<str:user>", views.follow, name="follow"),
+    path("follow", views.follow, name="follow"),
+    # LIKE(or UN-LIKE) a post:
+    path("like/<int:id>", views.like, name="like"),
+    # (UN)FOLLOW:
+    path("profile/addfollow/<str:username>", views.addfollow, name="addfollow"),
 ]
 
 

@@ -4,7 +4,7 @@
 
 <div class="content">
 
-
+{% if user.is_authenticated %}
   <div id="compose-view">
     <form id="squeak_form" action="{% url 'squeak' %}" method="post">
       {% csrf_token %} <!--Security token-->
@@ -15,7 +15,7 @@
     </form>
     <p id="count"></p>
   </div>
-
+{% endif %}
 
   {% include "network/posts.html" %}
 

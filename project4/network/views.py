@@ -8,6 +8,7 @@ from django import forms
 from django.views.decorators.csrf import csrf_exempt # # #
 import json
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 from .models import User, Post, Follow
 from .forms import NewPostForm
@@ -19,13 +20,22 @@ from .forms import NewPostForm
 
 
 def index(request):
-    form = NewPostForm(initial={'user': request.user}) # create new squeak form instance
-    posts = Post.objects.order_by('-timestamp').all() # get ALL posts
-        # .reverse() works too
+    form = NewPostForm(initial={'postuser': request.user}) # create new squeak form instance
+    posts = Post.objects.order_by('-timestamp').all() # get ALL posts / .reverse() works too
+    #--PAGINATION (show 10 posts per page)
+    page_obj = paginate(request, posts)
     return render(request, "network/index.html", {
         "form": form,
-        "posts": posts, #Post.objects.all()
+        #"posts": posts, #Post.objects.all()
+        "page_obj": page_obj,
     })
+
+
+def paginate(request, posts):
+    paginator =  Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
 
 
 def login_view(request):
@@ -107,7 +117,7 @@ def squeak(request):
 def edit(request, post_id):
     print("Editing...")
     if request.method == "PUT":
-        post = Post.objects.get(user=request.user, pk=post_id)
+        post = Post.objects.get(postuser=request.user, pk=post_id)
         content = json.loads(request.body)
         post.message = content["message"]
         post.save()
@@ -118,53 +128,82 @@ def edit(request, post_id):
 
 #--Load the user's profile page:
 # @login_required
-def profile(request, user):
+def profile(request, username):
     if request.method == "GET":
-        print("User:",user)
-        username = User.objects.get(username=user) # get User object
-        user_posts = Post.objects.filter(user=username.id).order_by('-timestamp') # access posts by Post's
-        #--How many people follow user:
-        userfollowers = Follow.objects.filter(follower=request.user).count()
-        #--How many people the user follows:
-        userfollowed = Follow.objects.filter(followed=request.user).count()
-        # # #
+        uprofile = User.objects.get(username=username) # get profileuser object
+        getfollowers = Follow.objects.filter(followed=uprofile.id) #.count()
+        checkfollow = [User.objects.get(pk=f.follower.id) for f in getfollowers]
+        iamfollowing = Follow.objects.filter(follower=uprofile.id)#.count()
+        user_posts = Post.objects.filter(postuser=uprofile.id).order_by('-timestamp') # access posts by Post's
+        #--Paginate the posts:
+        page_obj = paginate(request, user_posts)
         return render(request, "network/profile.html", {
             # User's own posts:
-            "posts": user_posts,
-            "username": username,
-            "follower": userfollowers,
-            "followed": userfollowed,
+            "page_obj": page_obj, # user_posts,
+            "username": uprofile,
+            "followers": getfollowers,
+            "checkfollow": checkfollow,
+            "following": iamfollowing,
         })
     else: #
         pass
 
 
 @login_required
-def follow(request, user):
-    if request.method == "GET":
-        #--Get ALL followed users of User(name) [query_set]
-        follow_queryset = Follow.objects.filter(follower=request.user)
-        #--Turn into a list of user.ids
-        flist = [f.id for f in follow_queryset]
-        print("Followed ids:",flist)
-        #--Get ALL posts of ALL followed users, of User
-        posts = Post.objects.filter(user__in=flist).order_by("timestamp").reverse()
-        print("POSTS:",posts)
-        return render(request, "network/follow.html", {
-            "posts": posts,
-        })
+def follow(request):
+    #--Get all [follows] YOU are [in/]following:
+    fs = Follow.objects.filter(follower=request.user)
+    # Get all user.ids of those Follow objects:
+    fusers = [f.followed for f in fs]
+    #--Get all posts from list of followed-users.id:
+    posts = Post.objects.filter(postuser__in=fusers).order_by('timestamp').reverse()
+    page_obj = paginate(request, posts)
+    return render(request, "network/follow.html", {
+        "page_obj": page_obj,
+    })
+
+
+@login_required
+@csrf_exempt
+def like(request, id):
+    post = Post.objects.get(pk=id)
+    if request.method == "PUT":
+        print("LIKING...")
+        if request.user in post.likedby.all(): #UNLIKE
+            #UNlike
+            post.likedby.remove(request.user) #add/remove b/c a SET!
+            post.save()
+            print("Changed to unlike")
+            return HttpResponse(status=204)
+        else: # LIKE
+            post.likedby.add(request.user)
+            post.save()
+            print("Like added.")
+            return HttpResponse(status=204)
+        #-> Not returning a render template b/c we do NOT want to reload the page after each like/unlike
+
+@login_required
+@csrf_exempt
+def addfollow(request, username):
+    #--Get actual User object from str Username
+    tofollow = User.objects.get(username=username)
+    #--Is the {request.user} already following {username}?
+    follows = Follow.objects.filter(follower=request.user, followed=tofollow)
+    if request.method == "PUT":
+        if not follows:
+            #--Create a model object ( .create() also .save()s. )
+            print("Creating following")
+            Follow.objects.create(follower=request.user, followed=tofollow)
+        else:
+            #--Unfollow (delete the model instance)
+            print("Deleting following")
+            follows.delete()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse() # TODO
 
 
 
-
-
-# Process each Squeak for #keyword tags
-def hashtags():
-    pass
-
-# Process each Squeak for @users tags
-def usertags():
-    pass
 
 
 #
